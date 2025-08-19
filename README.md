@@ -17,7 +17,7 @@ It is designed to be modular, scalable, and adaptable to multiple websites with 
 ---
 
 ## Tech Stack
-- **Python 3.9+**
+- **Recommended Python Version 3.11.9**
 - **Requests / HTTPX** – For HTTP requests.
 - **BeautifulSoup4 / lxml** – For HTML parsing.
 - **Selenium / Playwright** *(optional)* – For dynamic content scraping.
