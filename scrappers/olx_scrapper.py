@@ -2,6 +2,7 @@ from playwright.sync_api import sync_playwright
 from pydantic import BaseModel,Field
 import sys
 import re
+import time
 
 WEBSITE_URL = "https://www.olx.com.pk"
 
@@ -22,19 +23,17 @@ def clean_text(text: str)-> str:
 
 
 def scrape_url(link: str)-> dict:
-    # name = None
-    # price = None
-    # description = None
+    # print("Processing: ",link)
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=False)
         page = browser.new_page()
         try:
-            page.goto(link)
+            page.goto(link,wait_until="domcontentloaded")
             price = clean_text(page.locator("._24469da7").inner_text()) or None
             name = clean_text(page.locator("._75bce902").inner_text()) or None
             description = clean_text(page.locator("._7a99ad24").inner_text()) or None
         except Exception as e:
-            print(e)
+            pass
         browser.close()
         return {
             "name": name,
@@ -43,7 +42,6 @@ def scrape_url(link: str)-> dict:
             "description": description,
             "rating": ""
         }
-
 
 def OlxScrapper(product_name: str, num_of_products: int = 10) -> list[dict]:
     """
