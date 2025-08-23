@@ -120,7 +120,7 @@ def ScrapeListings(query: str) -> FinalResult:
 # - Right now search is only done based on the product, it does not support any sort of filters whatsoever 
 
 
-SaveResult(ScrapeListings("Get listing for gaming lcd from olx"), filename="gaming_lcd.csv")
+SaveResult(ScrapeListings("Get listing for nvidia graphic cards from olx"), filename="graphic_cards.csv")
 
 
 

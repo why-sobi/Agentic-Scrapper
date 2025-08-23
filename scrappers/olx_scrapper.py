@@ -2,7 +2,7 @@ from playwright.sync_api import sync_playwright
 from pydantic import BaseModel,Field
 import sys
 import re
-import time
+import json
 
 WEBSITE_URL = "https://www.olx.com.pk"
 
@@ -22,26 +22,34 @@ def clean_text(text: str)-> str:
     return text
 
 
-def scrape_url(link: str)-> dict:
-    # print("Processing: ",link)
+def scrape_urls(links: list[str]) -> list[dict]:
+    results = []
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False)
+        browser = p.chromium.launch(headless=True)
         page = browser.new_page()
-        try:
-            page.goto(link,wait_until="domcontentloaded")
-            price = clean_text(page.locator("._24469da7").inner_text()) or None
-            name = clean_text(page.locator("._75bce902").inner_text()) or None
-            description = clean_text(page.locator("._7a99ad24").inner_text()) or None
-        except Exception as e:
-            pass
+        for link in links:
+            try:
+                page.goto(link, wait_until="domcontentloaded")
+                price = clean_text(page.locator("._24469da7").inner_text()) or None
+                name = clean_text(page.locator("._75bce902").inner_text()) or None
+                description = clean_text(page.locator("._7a99ad24").inner_text()) or None
+                results.append({
+                    "name": name,
+                    "url": link,
+                    "price": price,
+                    "description": description,
+                    "rating": ""
+                })
+            except Exception as e:
+                results.append({
+                    "name": "",
+                    "url": link,
+                    "price": "",
+                    "description": "",
+                    "rating": ""
+                })
         browser.close()
-        return {
-            "name": name,
-            "url": link,
-            "price": price,
-            "description": description,
-            "rating": ""
-        }
+    return results
 
 def OlxScrapper(product_name: str, num_of_products: int = 10) -> list[dict]:
     """
@@ -85,8 +93,7 @@ def OlxScrapper(product_name: str, num_of_products: int = 10) -> list[dict]:
             page_number += 1
 
         browser.close()
-    scrapped_results = list(map(scrape_url,list(product_links)))
-    return scrapped_results
+    return json.dumps(scrape_urls(list(product_links)))
             
 if __name__ == "__main__":
     if len(sys.argv) > 2:
