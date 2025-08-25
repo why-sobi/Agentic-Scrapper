@@ -1,2 +1,4 @@
 .env
 /Agentic-Scrapper/
+.\utility\__pycache__
+.\scappers\__pycache__
