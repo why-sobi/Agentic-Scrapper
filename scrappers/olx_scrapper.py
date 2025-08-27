@@ -38,7 +38,8 @@ def scrape_urls(links: list[str]) -> list[dict]:
                     "url": link,
                     "price": price,
                     "description": description,
-                    "rating": ""
+                    "rating": "",
+                    "Website": "Olx"
                 })
             except Exception as e:
                 results.append({
@@ -46,7 +47,8 @@ def scrape_urls(links: list[str]) -> list[dict]:
                     "url": link,
                     "price": "",
                     "description": "",
-                    "rating": ""
+                    "rating": "",
+                    "Website": "Olx"
                 })
         browser.close()
     return results
