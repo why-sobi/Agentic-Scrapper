@@ -49,7 +49,7 @@ You will use the tools provided to gather information and return it in a structu
 User Query: {query}"""
 
 generic_scraping_description = """A tool to scrape {name} for listings based on a query. 
-It returns a list of dictionary with keys 'name', 'URL', 'price', 'rating', 'description'."""
+It returns a list of dictionary with keys 'name', 'URL', 'price', 'rating', 'description', 'Website'."""
 
 save_scraping_description = """Saves the scraped listings to a local CSV file. Expects a list of dictionaries along with a file name."""
 
@@ -70,9 +70,18 @@ DarazScrapperTool = Tool(
     description=generic_scraping_description.format(name="Daraz")
 )
 
-
+def scrapper(product_name):
+    daraz_products = DarazScrapper(product_name)
+    olx_products = OlxScrapper(product_name)
+    daraz_products.extend(olx_products)
+    return daraz_products
 # - `Utility Tools`
 
+Big_scrapper = Tool(
+    name="multiple_scrapper_and_merger",
+    func=scrapper,
+    description=generic_scraping_description.format(name="Daraz & Olx")
+)
 
 # SaveScrapingTool = StructuredTool.from_function(
 #     name="save_scraping",
@@ -84,7 +93,7 @@ DarazScrapperTool = Tool(
 
 tools = load_tools(["llm-math"], llm=llm)
 
-tools.extend([OlxScrapperTool, DarazScrapperTool]) # as we add more scrappers, we can extend this list
+tools.extend([OlxScrapperTool, DarazScrapperTool, Big_scrapper]) # as we add more scrappers, we can extend this list
 # tools.extend([SaveScrapingTool]) # as we add more utility tools, we can extend this list
 
 
