@@ -1,5 +1,6 @@
 import pandas as pd
 
+
 def SaveResult(items: list[dict], filename: str) -> None:
     """
     Saves the scraped items to a file.
@@ -7,16 +8,18 @@ def SaveResult(items: list[dict], filename: str) -> None:
     Args:
         items (List[dict[str, str]]): List of dictionaries containing item details.
     """
-    products_list = {'name': [], 'url': [], 'price': [], 'rating': [], 'description': []}
-    for item in items:
-        products_list['name'].append(item.get('name', ''))
-        products_list['url'].append(item.get('URL', ''))
-        products_list['price'].append(item.get('price', ''))
-        products_list['rating'].append(item.get('rating', ''))
-        products_list['description'].append(item.get('description', ''))
-        
-    df = pd.DataFrame.from_dict(products_list)
-    df.to_csv(filename, index=False) 
+    df = pd.DataFrame(items)
+
+    # Ensure all expected columns exist, filling missing ones with empty strings
+    expected_columns = ['name', 'URL', 'price', 'rating', 'description', 'website']
+    for col in expected_columns:
+        if col not in df:
+            df[col] = ''
+    
+    # Reorder columns to maintain consistency
+    df = df[expected_columns]
+
+    df.to_csv(filename, index=False)
 
     return f"Items saved successfully to {filename}"
 

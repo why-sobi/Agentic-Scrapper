@@ -35,20 +35,20 @@ def scrape_urls(links: list[str]) -> list[dict]:
                 description = clean_text(page.locator("._7a99ad24").inner_text()) or None
                 results.append({
                     "name": name,
-                    "url": link,
+                    "URL": link,
                     "price": price,
                     "description": description,
                     "rating": "",
-                    "Website": "Olx"
+                    "website": "Olx"
                 })
             except Exception as e:
                 results.append({
                     "name": "",
-                    "url": link,
+                    "URL": link,
                     "price": "",
                     "description": "",
                     "rating": "",
-                    "Website": "Olx"
+                    "website": "Olx"
                 })
         browser.close()
     return results
