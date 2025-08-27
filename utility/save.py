@@ -7,7 +7,6 @@ def SaveResult(items: list[dict], filename: str) -> None:
     Args:
         items (List[dict[str, str]]): List of dictionaries containing item details.
     """
-    print(items)
     products_list = {'name': [], 'url': [], 'price': [], 'rating': [], 'description': []}
     for item in items:
         products_list['name'].append(item.get('name', ''))
