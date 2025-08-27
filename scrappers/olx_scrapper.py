@@ -1,25 +1,10 @@
 from playwright.sync_api import sync_playwright
-from pydantic import BaseModel,Field
+from scrapper_helper import clean_text
+
 import sys
-import re
 import json
 
 WEBSITE_URL = "https://www.olx.com.pk"
-
-def clean_text(text: str)-> str:
-    """
-        Returns Cleaned Version of text, removing any extra weird ass characters
-    """
-    # Strip leading/trailing spaces
-    text = text.strip()
-
-    # Replace multiple spaces/newlines with one space
-    text = re.sub(r"\s+", " ", text)
-
-    # Escape quotes if needed (so it doesn't break JSON/Python dicts)
-    text = text.replace('"', '\\"').replace("'", "\\'")
-
-    return text
 
 
 def scrape_urls(links: list[str]) -> list[dict]:
