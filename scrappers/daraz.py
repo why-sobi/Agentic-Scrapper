@@ -25,7 +25,7 @@ def DarazScrapper(product: str) -> list[dict]:
     """
     
     result = []
-    print(f"Scraping Daraz for product: {product}")
+    # print(f"Scraping Daraz for product: {product}")
     
     with sync_playwright() as p:
         browser = p.firefox.launch(headless=False)
@@ -42,7 +42,7 @@ def DarazScrapper(product: str) -> list[dict]:
             link_element = container.query_selector(LINK_CLASS + ' a')
             price_element = container.query_selector(PRICE_CLASS)
             hasRating = True if container.query_selector(RATING_CHECKBOX_CLASS) else False
-            print("has Rating: ", hasRating)
+            # print("has Rating: ", hasRating)
             
             if link_element and price_element:
                 product_link = "https:" + link_element.get_attribute('href')  
@@ -80,7 +80,8 @@ def DarazScrapper(product: str) -> list[dict]:
                     "price": product_price,
                     "URL": product_link,
                     "rating": product_rating,
-                    "description": description.strip()
+                    "description": description.strip(),
+                    'website': "Daraz"
                 })
                 
                 page.go_back()  # Go back to the search results page

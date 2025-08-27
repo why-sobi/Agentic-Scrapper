@@ -71,6 +71,7 @@ DarazScrapperTool = Tool(
 )
 
 def scrapper(product_name):
+    print("Sir ammar ki pui pui")
     daraz_products = DarazScrapper(product_name)
     olx_products = OlxScrapper(product_name)
     daraz_products.extend(olx_products)
@@ -129,7 +130,7 @@ def ScrapeListings(query: str) -> FinalResult:
 # - Right now search is only done based on the product, it does not support any sort of filters whatsoever 
 
 
-SaveResult(ScrapeListings("Get listing for nvidia graphic cards from olx"), filename="graphic_cards.csv")
+SaveResult(ScrapeListings("Get listing for nvidia graphic cards"), filename="graphic_cards.csv")
 
 
 
