@@ -36,9 +36,9 @@ from utility.save import SaveResult
 # - ```IMPORT CUSTOM TOOLS HERE AS FUNCTIONS```
 
 
-from scrappers.olx_scrapper import OlxScrapper
+from scrappers.olx import OlxScrapper
 from scrappers.daraz import DarazScrapper
-
+from scrappers.mainScrapper import scrapper
 
 # - ```Setup of the Scrapper Agent```
 
@@ -55,9 +55,6 @@ save_scraping_description = """Saves the scraped listings to a local CSV file. E
 
 
 # - `Scrapper Tools`
-
-
-
 OlxScrapperTool = Tool(
     name="olx_scrapper",
     func=OlxScrapper,
@@ -70,19 +67,13 @@ DarazScrapperTool = Tool(
     description=generic_scraping_description.format(name="Daraz")
 )
 
-def scrapper(product_name):
-    print("Sir ammar ki pui pui")
-    daraz_products = DarazScrapper(product_name)
-    olx_products = OlxScrapper(product_name)
-    daraz_products.extend(olx_products)
-    return daraz_products
-# - `Utility Tools`
-
 Big_scrapper = Tool(
     name="multiple_scrapper_and_merger",
     func=scrapper,
     description=generic_scraping_description.format(name="Daraz & Olx")
 )
+
+# - `Utility Tools`
 
 # SaveScrapingTool = StructuredTool.from_function(
 #     name="save_scraping",
@@ -90,7 +81,6 @@ Big_scrapper = Tool(
 #     description=save_scraping_description,
 #     # args_schema=SaveResultParams
 # )
-
 
 tools = load_tools(["llm-math"], llm=llm)
 
@@ -120,7 +110,6 @@ def ScrapeListings(query: str) -> FinalResult:
         agent=AgentType.STRUCTURED_CHAT_ZERO_SHOT_REACT_DESCRIPTION,
         verbose=True
     )
-    # print(type(agent.agent))
     
     response = agent.invoke(query)
     return ast.literal_eval(response['output']) # Convert the string representation of the list back to a Python list

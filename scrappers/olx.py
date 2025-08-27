@@ -1,5 +1,5 @@
 from playwright.sync_api import sync_playwright
-from scrapper_helper import clean_text
+from scrappers.scrapperUtils import clean_text
 
 import sys
 import json
