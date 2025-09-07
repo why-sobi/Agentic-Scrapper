@@ -33,12 +33,11 @@ def DarazScrapper(product_name: str, num: int = 10) -> list[dict]:
     ratings = []
     
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False)
+        browser = p.chromium.launch(headless=True)
         page = browser.new_page()
         page.goto(URL.format(product=product_name))
         
         page.wait_for_selector(INFO_CONTAINER_CLASS)
-        
         
         while len(product_links) < num:
             products = page.query_selector_all(INFO_CONTAINER_CLASS)

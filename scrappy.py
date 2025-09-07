@@ -120,8 +120,3 @@ def ScrapeListings(query: str) -> FinalResult:
 
 
 SaveResult(ScrapeListings("Get listing for nvidia graphic cards"), filename="graphic_cards.csv")
-
-
-
-
-
