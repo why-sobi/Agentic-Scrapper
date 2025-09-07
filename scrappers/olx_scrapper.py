@@ -10,7 +10,7 @@ WEBSITE_URL = "https://www.olx.com.pk"
 def scrape_urls(links: list[str]) -> list[dict]:
     results = []
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
+        browser = p.chromium.launch(headless=False)
         page = browser.new_page()
         for link in links:
             try:
@@ -56,7 +56,7 @@ def OlxScrapper(product_name: str, num_of_products: int = 10) -> list[dict]:
     product_links = set()
 
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
+        browser = p.chromium.launch(headless=False)
         page = browser.new_page()
 
         page_number = 0
@@ -64,7 +64,7 @@ def OlxScrapper(product_name: str, num_of_products: int = 10) -> list[dict]:
             page.goto(build_search_url(product_name, page_number))
             
             # Grab all product <li> elements
-            ul = page.locator("xpath=/html/body/div/div[1]/header[2]/div/div/div/div[2]/div[2]/div[2]/div/div/div[3]/ul")
+            ul = page.locator("ul._1aad128c.ec65250d")
             items = ul.locator('xpath=/li').all()
             for item in items:
                 href = item.locator("a").first.get_attribute("href")
@@ -76,7 +76,7 @@ def OlxScrapper(product_name: str, num_of_products: int = 10) -> list[dict]:
                 product_links.add(WEBSITE_URL + href)
                 if len(product_links) >= num_of_products:
                     break
-
+                
             page_number += 1
 
         browser.close()
