@@ -1,6 +1,7 @@
 from playwright.sync_api import sync_playwright
 from scrappers.scrapperUtils import clean_text
 
+import time
 import sys
 import json
 
@@ -10,31 +11,32 @@ WEBSITE_URL = "https://www.olx.com.pk"
 def scrape_urls(links: list[str]) -> list[dict]:
     results = []
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False)
+        browser = p.chromium.launch(headless=True)
         page = browser.new_page()
-        for link in links:
+        i = 0
+        while  i < len(links):
+            page.goto(links[i], wait_until="domcontentloaded")
+            print("Here")
+            while "error.html" in page.url:
+                page.goto(links[i], wait_until="domcontentloaded")
+                print("still sleeping")
+                time.sleep(5)
+            
             try:
-                page.goto(link, wait_until="domcontentloaded")
                 price = clean_text(page.locator("._24469da7").inner_text()) or None
                 name = clean_text(page.locator("._75bce902").inner_text()) or None
                 description = clean_text(page.locator("._7a99ad24").inner_text()) or None
                 results.append({
                     "name": name,
-                    "URL": link,
-                    "price": price,
+                    "URL": links[i],
+                    "price": price if price else "",
                     "description": description,
                     "rating": "",
                     "website": "Olx"
                 })
+                i += 1
             except Exception as e:
-                results.append({
-                    "name": "",
-                    "URL": link,
-                    "price": "",
-                    "description": "",
-                    "rating": "",
-                    "website": "Olx"
-                })
+                continue
         browser.close()
     return results
 
@@ -58,11 +60,24 @@ def OlxScrapper(product_name: str, num_of_products: int = 10) -> list[dict]:
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=False)
         page = browser.new_page()
-
         page_number = 0
+        page.goto(build_search_url(product_name, page_number))
         while len(product_links) < num_of_products:
-            page.goto(build_search_url(product_name, page_number))
-            
+            print("Maybe Here")
+            while "error.html" in page.url:
+                time.sleep(5)
+                browser.close()
+                browser = p.chromium.launch(headless=False)
+                page = browser.new_page()
+                page.goto(build_search_url(product_name, page_number))
+                print("still sleeping")
+                time.sleep(5)
+            try:
+                button = page.locator("#optInText")
+                if button.is_visible():
+                    button.click()
+            except Exception as e:
+                pass
             # Grab all product <li> elements
             ul = page.locator("ul._1aad128c.ec65250d")
             items = ul.locator('xpath=/li').all()
@@ -76,10 +91,9 @@ def OlxScrapper(product_name: str, num_of_products: int = 10) -> list[dict]:
                 product_links.add(WEBSITE_URL + href)
                 if len(product_links) >= num_of_products:
                     break
-                
-            page_number += 1
+            if len(items) > 0:
+                page_number += 1
 
-        browser.close()
     return json.dumps(scrape_urls(list(product_links)))
             
 if __name__ == "__main__":

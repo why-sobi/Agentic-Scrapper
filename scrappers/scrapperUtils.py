@@ -11,6 +11,6 @@ def clean_text(text: str)-> str:
     text = re.sub(r"\s+", " ", text)
 
     # Escape quotes if needed (so it doesn't break JSON/Python dicts)
-    text = text.replace('"', '\\"').replace("'", "\\'")
+    text = text.replace("\n", "\\n")
 
     return text

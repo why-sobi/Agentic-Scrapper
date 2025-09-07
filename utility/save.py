@@ -19,9 +19,10 @@ def SaveResult(items: list[dict], filename: str) -> None:
     # Reorder columns to maintain consistency
     df = df[expected_columns]
 
-    df.to_csv(filename, index=False)
+    df.to_csv(filename, index=False,encoding='utf-16', errors='ignore')
 
     return f"Items saved successfully to {filename}"
+
 
 if __name__ == "__main__":
     pass  # This module is not meant to be run directly

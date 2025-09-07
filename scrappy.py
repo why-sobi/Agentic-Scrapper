@@ -19,7 +19,7 @@ from dotenv import load_dotenv
 import os
 
 load_dotenv()
-api_key = os.getenv("GOOGLE_API_KEY_1")
+api_key = os.getenv("GOOGLE_API_KEY_3")
 
 
 llm = ChatGoogleGenerativeAI(
@@ -112,14 +112,16 @@ def ScrapeListings(query: str) -> FinalResult:
     )
     
     response = agent.invoke(query)
-    return ast.literal_eval(response['output']) # Convert the string representation of the list back to a Python list
+    from scrappers.scrapperUtils import clean_text
+    return ast.literal_eval(clean_text(response['output'])) # Convert the string representation of the list back to a Python list
 
 
 # ## NOTE  
 # - Right now search is only done based on the product, it does not support any sort of filters whatsoever 
 
-
-SaveResult(ScrapeListings("Get listing for nvidia graphic cards"), filename="graphic_cards.csv")
+import sys
+query = sys.argv[1]
+SaveResult(ScrapeListings(f"Get listing for {query} only from olx.com."), filename=f"{query}.csv")
 
 
 
