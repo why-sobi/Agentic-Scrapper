@@ -1,5 +1,7 @@
 from bs4 import BeautifulSoup
+import ast # For structured output (Convert string representation of list to Python list)
 
+from utility.save import SaveResult
 
 html = """<article class='lzd-article'>
 <ul><li><div><span>Xbox one
@@ -15,3 +17,14 @@ html2 = """<article style="white-space:break-spaces" class="lzd-article"><p styl
 
 parser = BeautifulSoup(html2, features='html.parser')
 print(parser.get_text(separator='\n'))
+
+
+json_text = """[{'name': 'NVIDIA - SHIELD Android TV Pro - 16GB - 4K HDR Streaming Media Player with Google Assistant and GeForce NOW - Black', 'price': '$199.99', 'URL': 'https://www.bestbuy.com/product/nvidia-shield-android-tv-pro-16gb-4k-hdr-streaming-media-player-with-google-assistant-and-geforce-now-black/J3L2TZ9S46', 'rating': '4.6/5', 'description': 'Enjoy fast online streaming with this NVIDIA SHIELD TV media player. The 4K HDR capability provides visual quality, while Dolby Atmos and DTS-X surround sound offer an immersive watching and listening experience. This NVIDIA SHIELD TV media player supports unlimited applications for movies, shows, games and music of your choosing, providing endless entertainment. GeForce NOW instantly transforms SHIELD TV into a powerful PC gaming rig. Play over 1000+ titles and nearly 100 of the biggest free to play games. The new GeForce NOW RTX 3080 membership unlocks GeForce RTX 3080 gaming servers in 4K HDR, the shortest wait times and longest session lengths, with RTX ON including ray tracing and DLSS graphics for supported games.', 'website': 'BestBuy'}, {'name': 'NVIDIA - GeForce RTX 5080 16GB GDDR7 Graphics Card - Gun Metal', 'price': '$999.99', 'URL': 'https://www.bestbuy.com/product/nvidia-geforce-rtx-5080-16gb-gddr7-graphics-card-gun-metal/J3GWYHGP8C', 'rating': '4.7/5', 'description': 'Gear up for game-changing experiences with the NVIDIA GeForce RTX 5080 and AI-powered DLSS 4. Built with NVIDIA Blackwell 
+and equipped with blistering-fast GDDR7 memory, it lets you run the most graphically demanding games and creative applications with stunning fidelity and performance. With NVIDIA Studio you can bring your creative projects to life faster than ever.', 'website': 'BestBuy'}, {'name': 'NVIDIA - GeForce RTX 5070 12GB GDDR7 Graphics Card - Graphite Grey', 'price': '$549.99', 'URL': 'https://www.bestbuy.com/product/nvidia-geforce-rtx-5070-12gb-gddr7-graphics-card-graphite-grey/J3GWYHGP8K', 'rating': '4.7/5', 'description': 'Rating 4.8 out of 5 stars with 26 reviews', 'website': 'BestBuy'}, {'name': 'NVIDIA - SHIELD Android TV - 8GB - 4K HDR Streaming Media Player with Google Assistant and GeForce NOW - Black', 'price': '$149.99', 'URL': 'https://www.bestbuy.com/product/nvidia-shield-android-tv-8gb-4k-hdr-streaming-media-player-with-google-assistant-and-geforce-now-black/J3L2TZ963T', 'rating': '4.5/5', 'description': 'Watch your favorite content with this NVIDIA SHIELD TV 4K streaming media player. The NVIDIA Tegra X1+ processor ensures fast performance, and Gigabit Ethernet and dual-band Wi-Fi connectivity help minimize buffering and maximize stream quality. This NVIDIA SHIELD TV 4K streaming media player includes an advanced remote that lets you search for and play 
+content using voice commands.GeForce NOW instantly transforms SHIELD TV into a powerful PC gaming rig. Play over 1000+ titles and nearly 100 of the biggest free to play games. The new GeForce NOW RTX 3080 membership unlocks GeForce RTX 3080 gaming servers in 4K HDR, the shortest wait times and longest session lengths, with RTX ON including ray tracing and DLSS graphics for supported games.', 'website': 'BestBuy'}, {'name': 'NVIDIA - SHIELD Android TV Pro - 16GB - 4K HDR Streaming Media Player with Google Assistant and GeForce NOW - Black', 'price': '$199.99', 'URL': 'https://www.bestbuy.com/product/nvidia-shield-android-tv-pro-16gb-4k-hdr-streaming-media-player-with-google-assistant-and-geforce-now-black/J3L2TZ9S46', 'rating': '4.6/5', 'description': 'Rating 4.5 out of 5 stars with 1233 reviews', 'website': 'BestBuy'}]"""
+
+json_text = json_text.replace("\n", "\\n")
+
+
+
+SaveResult(ast.literal_eval(json_text), 'BestBuy.csv')
