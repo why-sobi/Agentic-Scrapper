@@ -8,7 +8,9 @@ from langchain.agents import AgentType
 from langchain.tools import StructuredTool
 
 from pydantic import BaseModel
+
 import ast # For structured output (Convert string representation of list to Python list)
+import sys
 
 # from langchain.prompts import PromptTemplate
 # from langchain.chains.llm import LLMChain
@@ -38,6 +40,7 @@ from utility.save import SaveResult
 
 from scrappers.olx import OlxScrapper
 from scrappers.daraz import DarazScrapper
+from scrappers.bestbuy import BestBuyScraper
 from scrappers.mainScrapper import scrapper
 
 # - ```Setup of the Scrapper Agent```
@@ -56,15 +59,21 @@ save_scraping_description = """Saves the scraped listings to a local CSV file. E
 
 # - `Scrapper Tools`
 OlxScrapperTool = Tool(
-    name="olx_scrapper",
+    name="OLX_Scraper",
     func=OlxScrapper,
     description=generic_scraping_description.format(name="OLX"),
 )
 
 DarazScrapperTool = Tool(
-    name="daraz_scrapper",
+    name="Daraz_Scraper",
     func=DarazScrapper,
     description=generic_scraping_description.format(name="Daraz")
+)
+
+BestBuyScraperTool = Tool(
+    name="BestBuy_Scraper",
+    func=BestBuyScraper,
+    description=generic_scraping_description.format(name="Best Buy")
 )
 
 Big_scrapper = Tool(
@@ -84,7 +93,7 @@ Big_scrapper = Tool(
 
 tools = load_tools(["llm-math"], llm=llm)
 
-tools.extend([OlxScrapperTool, DarazScrapperTool, Big_scrapper]) # as we add more scrappers, we can extend this list
+tools.extend([OlxScrapperTool, DarazScrapperTool, BestBuyScraperTool, Big_scrapper]) # as we add more scrappers, we can extend this list
 # tools.extend([SaveScrapingTool]) # as we add more utility tools, we can extend this list
 
 
@@ -119,11 +128,5 @@ def ScrapeListings(query: str) -> FinalResult:
 # ## NOTE  
 # - Right now search is only done based on the product, it does not support any sort of filters whatsoever 
 
-import sys
 query = sys.argv[1]
 SaveResult(ScrapeListings(f"Get listing for {query} only from olx.com."), filename=f"{query}.csv")
-
-
-
-
-
