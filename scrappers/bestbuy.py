@@ -59,8 +59,9 @@ def BestBuyScraper(product_name: str, num: int = 5) -> list[dict]:
                 "URL": link,
                 "rating": rating,
                 "description": clean_text(description),
-                'website': "BestBuy"
+                'website': "BestBuy America"
             })
+            
     return result
 
 if __name__ == "__main__":
