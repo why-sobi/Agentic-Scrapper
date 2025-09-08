@@ -89,12 +89,8 @@ def DarazScrapper(product_name: str, num: int = 10) -> list[dict]:
         
 
 if __name__ == "__main__":
-    if len(sys.argv) > 2:
-        print(OptimizedScraper(sys.argv[1],int(sys.argv[2])))
-    else:
-        print(OptimizedScraper(sys.argv[1]))
     pass  # This module is not meant to be run directly
     # It is intended to be imported and used in other modules.
-    results = DarazScrapper('Xbox One')
-    for result in results:
-        print(result)
+    # results = DarazScrapper('Xbox One')
+    # for result in results:
+    #     print(result)
