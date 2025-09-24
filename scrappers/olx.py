@@ -58,7 +58,7 @@ def OlxScrapper(product_name: str, num_of_products: int = 10) -> list[dict]:
     product_links = set()
 
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False)
+        browser = p.chromium.launch(headless=True)
         page = browser.new_page()
         page_number = 0
         page.goto(build_search_url(product_name, page_number))
@@ -67,7 +67,7 @@ def OlxScrapper(product_name: str, num_of_products: int = 10) -> list[dict]:
             while "error.html" in page.url:
                 time.sleep(5)
                 browser.close()
-                browser = p.chromium.launch(headless=False)
+                browser = p.chromium.launch(headless=True)
                 page = browser.new_page()
                 page.goto(build_search_url(product_name, page_number))
                 print("still sleeping")

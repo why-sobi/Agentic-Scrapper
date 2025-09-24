@@ -2,7 +2,7 @@ from playwright.sync_api import sync_playwright
 from time import sleep
 from bs4 import BeautifulSoup
 
-from scrapperUtils import clean_text
+from scrappers.scrapperUtils import clean_text
 
 URL = 'https://www.bestbuy.com/site/searchpage.jsp?id=pcat17071&st={product}&intl=nosplash'
 PRODUCT = '.sku-block'
@@ -22,7 +22,7 @@ def BestBuyScraper(product_name: str, num: int = 5) -> list[dict]:
     product_links = []
     
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False)
+        browser = p.chromium.launch(headless=True)
         page = browser.new_page()
         
         page.goto(URL.format(product=product_name), timeout=50000)

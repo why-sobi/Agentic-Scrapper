@@ -79,7 +79,7 @@ BestBuyScraperTool = Tool(
 Big_scrapper = Tool(
     name="multiple_scrapper_and_merger",
     func=scrapper,
-    description=generic_scraping_description.format(name="Daraz & Olx")
+    description=generic_scraping_description.format(name="All Platforms"),
 )
 
 # - `Utility Tools`
@@ -129,4 +129,4 @@ def ScrapeListings(query: str) -> FinalResult:
 # - Right now search is only done based on the product, it does not support any sort of filters whatsoever 
 
 query = sys.argv[1]
-SaveResult(ScrapeListings(f"Get listing for {query} only from olx.com."), filename=f"{query}.csv")
+SaveResult(ScrapeListings(f"Get listing for {query}"), filename=f"{query}.csv")
